@@ -19,9 +19,9 @@ if results is not None:
     points = results[1]
     
     # extract aligned face chips
-    chips = detector.extract_image_chips(img, points, 144, 0.37)
+    chips = detector.extract_image_chips(img, points, 256, 0.37)#sura_由测试结果图片分析144*144就是这里我们改成256*256
     for i, chip in enumerate(chips):
-        cv2.imshow('chip_'+str(i), chip)
+        #cv2.imshow('chip_'+str(i), chip)#sura_据说是这个bug，没什么大用的代码注释掉
         cv2.imwrite('chip_'+str(i)+'.png', chip)
 
     draw = img.copy()
@@ -30,9 +30,9 @@ if results is not None:
 
     for p in points:
         for i in range(5):
-            cv2.circle(draw, (p[i], p[i + 5]), 1, (0, 0, 255), 2)
+            cv2.circle(draw, (int(p[i]), int(p[i + 5])), 1, (0, 0, 255), 2)#sura_报错又是浮点数转换为整数
 
-    cv2.imshow("detection result", draw)
+    #cv2.imshow("detection result", draw)#sura_据说是这个bug，没什么大用的代码注释掉
     cv2.waitKey(0)
 
 # --------------
@@ -61,6 +61,6 @@ while True:
     for p in points:
         for i in range(5):
             cv2.circle(draw, (p[i], p[i + 5]), 1, (255, 0, 0), 2)
-    cv2.imshow("detection result", draw)
+    #cv2.imshow("detection result", draw)#sura_据说是这个bug，没什么大用的代码注释掉
     cv2.waitKey(30)
 '''

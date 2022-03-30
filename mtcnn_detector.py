@@ -3,11 +3,17 @@ import os
 import mxnet as mx
 import numpy as np
 import math
-import cv2
+import cv2#sura_cv2 import 报错
 from multiprocessing import Pool
 from itertools import repeat
-from itertools import izip
+#from itertools import izip
+try:
+    from itertools import izip
+except ImportError:
+    izip = zip
+#sura_izip import 报错
 from helper import nms, adjust_input, generate_bbox, detect_first_stage_warpper
+
 
 class MtcnnDetector(object):
     """
@@ -208,7 +214,7 @@ class MtcnnDetector(object):
             return None
 
         # only works for color image
-        if len(img.shape) != 3:
+        if len(img.shape) != 3:#sura_保证RGB的3个通道
             return None
 
         # detected boxes
@@ -428,8 +434,8 @@ class MtcnnDetector(object):
         cov = np.matrix([[0.0, 0.0], [0.0, 0.0]])
 
         # compute the mean and cov
-        from_shape_points = from_shape.reshape(from_shape.shape[0]/2, 2)
-        to_shape_points = to_shape.reshape(to_shape.shape[0]/2, 2)
+        from_shape_points = from_shape.reshape(from_shape.shape[0]//2, 2)
+        to_shape_points = to_shape.reshape(to_shape.shape[0]//2, 2)
         mean_from = from_shape_points.mean(axis=0)
         mean_to = to_shape_points.mean(axis=0)
 
@@ -481,7 +487,7 @@ class MtcnnDetector(object):
         crop_imgs = []
         for p in points:
             shape  =[]
-            for k in range(len(p)/2):
+            for k in range(len(p)//2):#sura_'float' object cannot be interpreted as an integer 报错
                 shape.append(p[k])
                 shape.append(p[k+5])
 
@@ -496,7 +502,7 @@ class MtcnnDetector(object):
             from_points = []
             to_points = []
 
-            for i in range(len(shape)/2):
+            for i in range(len(shape)//2):#sura_'float' object cannot be interpreted as an integer 报错
                 x = (padding + mean_face_shape_x[i]) / (2 * padding + 1) * desired_size
                 y = (padding + mean_face_shape_y[i]) / (2 * padding + 1) * desired_size
                 to_points.append([x, y])
